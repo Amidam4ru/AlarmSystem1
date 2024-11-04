@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -8,22 +9,23 @@ public class Alarm : MonoBehaviour
 
     private float _maxAlarmVolume;
     private float _minAlarmVolume;
-    private float _targetVolume;
+    private Coroutine _shootCorutine;
+    private WaitForEndOfFrame _frameTimer;
 
     private void Awake()
     {
         _maxAlarmVolume = 1.0f;
         _minAlarmVolume = 0.0f;
-        _targetVolume = 0.0f;
+        _frameTimer = new WaitForEndOfFrame();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.TryGetComponent<Player>(out Player player))
         {
-            _doghouse.Play();
-            _doghouse.volume += _volumeChangeSpeed * Time.deltaTime;
-            _targetVolume = _maxAlarmVolume;
+            StopActiveCoroutine(_shootCorutine);
+
+            _shootCorutine = StartCoroutine(ChancgeVolume(_maxAlarmVolume));
         }
     }
 
@@ -31,19 +33,39 @@ public class Alarm : MonoBehaviour
     {
         if (other.transform.TryGetComponent<Player>(out Player player))
         {
-            _targetVolume = _minAlarmVolume;
+            StopActiveCoroutine(_shootCorutine);
+
+            _shootCorutine = StartCoroutine(ChancgeVolume(_minAlarmVolume));
         }
     }
 
-    private void Update()
+    private void StopActiveCoroutine(Coroutine coroutine)
     {
-        if (_doghouse.volume != _minAlarmVolume)
+        if (coroutine != null)
         {
-            _doghouse.volume = Mathf.MoveTowards(_doghouse.volume, _targetVolume, _volumeChangeSpeed * Time.deltaTime);
+            StopCoroutine(coroutine);
         }
-        else
+    }
+
+    private IEnumerator ChancgeVolume(float targetVolume)
+    {
+        if (_doghouse.volume == 0)
+        {
+            _doghouse.Play();
+        }
+
+        while (_doghouse.volume != targetVolume)
+        {
+            _doghouse.volume = Mathf.MoveTowards(_doghouse.volume, targetVolume, _volumeChangeSpeed * Time.deltaTime);
+
+            yield return _frameTimer;
+        }
+
+        if (_doghouse.volume == 0)
         {
             _doghouse.Pause();
         }
+
+        yield return null;
     }
 }

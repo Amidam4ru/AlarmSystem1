@@ -1,44 +1,27 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(ReadingMotionController))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private Transform _cameraTransform;
 
     private Rigidbody _rigidBody;
-
-    private PlayerController _playerController;
+    private ReadingMotionController _controller;
     private Vector3 _movementDirection;
     private Vector3 _movementInput;
 
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
-
-        _playerController = new PlayerController();
-        _playerController.Movement.Move.performed += OnMove;
-        _playerController.Movement.Move.canceled += OnMove;
-    }
-
-    private void OnEnable()
-    {
-        _playerController.Movement.Enable();
-    }
-
-    private void OnDisable()
-    {
-        _playerController.Movement.Disable();
-    }
-
-    private void OnMove(InputAction.CallbackContext context)
-    {
-        _movementInput = new Vector3(context.ReadValue<Vector2>().x, 0f, context.ReadValue<Vector2>().y);
+        _controller = GetComponent<ReadingMotionController>();
     }
 
     private void Update()
     {
+        _movementInput = _controller.MovementInput;
+
         Vector3 forward = _cameraTransform.forward;
         forward.y = 0f;
         forward.Normalize();

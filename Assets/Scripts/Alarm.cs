@@ -1,53 +1,54 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(AudioSource))]
 public class Alarm : MonoBehaviour
 {
-    [SerializeField] private AudioSource _doghouse;
     [SerializeField] private float _volumeChangeSpeed = 0.5f;
+    [SerializeField] private AlarmZone _alarmZone;
 
     private float _maxAlarmVolume;
     private float _minAlarmVolume;
-    private Coroutine _shootCorutine;
+    private Coroutine _chancgeVolumeCorutine;
     private WaitForEndOfFrame _frameTimer;
+    private AudioSource _doghouse;
 
     private void Awake()
     {
         _maxAlarmVolume = 1.0f;
         _minAlarmVolume = 0.0f;
         _frameTimer = new WaitForEndOfFrame();
+        _doghouse = GetComponent<AudioSource>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnEnable()
     {
-        if (other.transform.TryGetComponent<Player>(out Player player))
-        {
-            StopActiveCoroutine(_shootCorutine);
-
-            _shootCorutine = StartCoroutine(ChancgeVolume(_maxAlarmVolume));
-        }
+        _alarmZone.PlayerIsNoticed += SwitchAlarm;
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnDisable()
     {
-        if (other.transform.TryGetComponent<Player>(out Player player))
-        {
-            StopActiveCoroutine(_shootCorutine);
-
-            _shootCorutine = StartCoroutine(ChancgeVolume(_minAlarmVolume));
-        }
+        _alarmZone.PlayerIsNoticed -= SwitchAlarm;
     }
 
-    private void StopActiveCoroutine(Coroutine coroutine)
+    private void SwitchAlarm(bool isWork)
     {
-        if (coroutine != null)
+        if (_chancgeVolumeCorutine != null)
         {
-            StopCoroutine(coroutine);
+            StopCoroutine(_chancgeVolumeCorutine);
         }
+
+        if (isWork == true)
+        {
+            _chancgeVolumeCorutine = StartCoroutine(ChangeVolume(_maxAlarmVolume));
+        }
+        else
+        {
+            _chancgeVolumeCorutine = StartCoroutine(ChangeVolume(_minAlarmVolume));
+        }  
     }
 
-    private IEnumerator ChancgeVolume(float targetVolume)
+    private IEnumerator ChangeVolume(float targetVolume)
     {
         if (_doghouse.volume == 0)
         {

@@ -351,7 +351,7 @@ GameObject:
   m_Component:
   - component: {fileID: 57903856}
   - component: {fileID: 57903855}
-  - component: {fileID: 57903854}
+  - component: {fileID: 57903857}
   m_Layer: 0
   m_Name: AlarmSystem
   m_TagString: Untagged
@@ -359,20 +359,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &57903854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 57903853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5bbd0631cbbd3f488b6d958b7032264, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _doghouse: {fileID: 1704563914}
-  _volumeChangeSpeed: 0.2
 --- !u!65 &57903855
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -410,6 +396,18 @@ Transform:
   - {fileID: 1704563913}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &57903857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57903853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6de83af994399e4181e7a3d68113ba6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &85194039
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3825,6 +3823,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1704563913}
   - component: {fileID: 1704563914}
+  - component: {fileID: 1704563915}
   m_Layer: 0
   m_Name: Doghouse
   m_TagString: Untagged
@@ -3949,6 +3948,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1704563915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704563912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5bbd0631cbbd3f488b6d958b7032264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _volumeChangeSpeed: 0.5
+  _alarmZone: {fileID: 57903857}
 --- !u!1001 &1716939133
 PrefabInstance:
   m_ObjectHideFlags: 0
